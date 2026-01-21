@@ -8,5 +8,14 @@ public class Ferdi {
             "|_|  \\___|_|  \\__,_|_|\n";
 
         System.out.println("Hello from\n" + logo);
+
+        String greeting = "____________________________________________________________\n" +
+            "Hello! I think I my name is Ferdi\n" +
+            "What can I do for you?\n" +
+            "____________________________________________________________\n"+
+            "Bye. Hope to see you again soon!\n" +
+            "____________________________________________________________\n";
+
+        System.out.println(greeting);
     }
 }
