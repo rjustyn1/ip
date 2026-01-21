@@ -24,8 +24,10 @@ public class Ferdi {
 
         String command = scanner.nextLine();
         while (!command.equals("bye")) {
+            String[] parsedCommand = command.split(" ");
+
             System.out.println("   ____________________________________________________________\n");
-            if (command.equals("list")) {
+            if (parsedCommand[0].equals("list")) {
                 if (taskCount == 0) {
                     System.out.println("    You have no tasks in your list.");
                 }
@@ -36,22 +38,54 @@ public class Ferdi {
                     System.out.println("    " + (i + 1) + ". " + taskList[i].toString());
                 }
             }
-            else if (command.startsWith("mark")){
-                int taskNum = Integer.parseInt(command.split(" ")[1]);
+            else if (parsedCommand[0].equals("todo")){
+                String description = command.substring(5);
+                ToDo newTask = new ToDo(description);
+                taskList[taskCount] = newTask;
+                taskCount++;
+                System.out.println("    Got it. I've added this task:");
+                System.out.println("      " + newTask.toString());
+                System.out.println("    Now you have " + taskCount + " tasks in the list.");
+            }
+            else if (parsedCommand[0].equals("deadline")){
+                String[] parts = command.substring(9).split(" /by ");
+                String description = parts[0];
+                String by = parts[1];
+                Deadline newTask = new Deadline(description, by);
+                taskList[taskCount] = newTask;
+                taskCount++;
+                System.out.println("    Got it. I've added this task:");
+                System.out.println("      " + newTask.toString());
+                System.out.println("    Now you have " + taskCount + " tasks in the list.");
+            }
+            else if (parsedCommand[0].equals("event")){
+                String[] parts = command.substring(6).split(" /from | /to ");
+                String description = parts[0];
+                String from = parts[1];
+                String to = parts[2];
+                Event newTask = new Event(description, from, to);
+                taskList[taskCount] = newTask;
+                taskCount++;
+                System.out.println("    Got it. I've added this task:");
+                System.out.println("      " + newTask.toString());
+                System.out.println("    Now you have " + taskCount + " tasks in the list.");
+
+            }
+            else if (parsedCommand[0].equals("mark")){
+                int taskNum = Integer.parseInt(parsedCommand[1]);
                 taskList[taskNum - 1].mark();
                 System.out.println("    Nice! I've marked this task as done:");
                 System.out.println("    " + taskList[taskNum - 1].toString());
             }
-            else if (command.startsWith("unmark")){
-                int taskNum = Integer.parseInt(command.split(" ")[1]);
+            else if (parsedCommand[0].equals("unmark")){
+                int taskNum = Integer.parseInt(parsedCommand[1]);
                 taskList[taskNum - 1].unmark();
                 System.out.println("    OK, I've marked this task as not done yet:");
                 System.out.println("    " + taskList[taskNum - 1].toString());
             }
             else {
-                System.out.println("    " + "added: " + command);
-                taskCount++;
-                taskList[taskCount - 1] = new Task(command);
+                System.out.println("    " + "Unknown command: " + parsedCommand[0]);
+                System.out.println("    " + "Please try again.");
             }
 
             System.out.println("   ____________________________________________________________\n");
