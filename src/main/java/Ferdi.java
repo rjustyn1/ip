@@ -86,7 +86,7 @@ public class Ferdi {
                     System.out.println("    OOPS!!! Please provide a valid task number to mark.");
                 } catch (Exception e) {
                     System.out.println("    There are only " + taskCount + " tasks in the list.");
-                    System.out.println("You cannot mark task number " + parsedCommand[1] + "." );
+                    System.out.println("    You cannot mark task number " + parsedCommand[1] + "." );
                 }
             }
             else if (parsedCommand[0].equals("unmark")){
