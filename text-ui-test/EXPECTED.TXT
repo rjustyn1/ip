@@ -54,7 +54,7 @@ Hello from
    ____________________________________________________________
 
     Got it. I've added this task:
-      [E][ ] meeting (from: Monday to: Wednesday)
+      [E][ ] meeting (from: Monday, to: Wednesday)
     Now you have 4 tasks in the list.
    ____________________________________________________________
 
@@ -64,7 +64,39 @@ Hello from
     1. [T][ ] read book
     2. [T][ ] return book
     3. [D][ ] project (by: Sunday)
-    4. [E][ ] meeting (from: Monday to: Wednesday)
+    4. [E][ ] meeting (from: Monday, to: Wednesday)
+   ____________________________________________________________
+
+   ____________________________________________________________
+
+    OOPS!!! The description of a todo cannot be empty.
+   ____________________________________________________________
+
+   ____________________________________________________________
+
+    OOPS!!! The description of a deadline cannot be empty.
+   ____________________________________________________________
+
+   ____________________________________________________________
+
+    OOPS!!! The description of an event cannot be empty.
+   ____________________________________________________________
+
+   ____________________________________________________________
+
+    Unknown command: blah
+    Please try again, with "todo", "deadline", "event", "mark", "unmark", "list", or "bye".
+   ____________________________________________________________
+
+   ____________________________________________________________
+
+    There are only 4 tasks in the list.
+    You cannot mark task number 99.
+   ____________________________________________________________
+
+   ____________________________________________________________
+
+    OOPS!!! Please provide a valid task number to mark.
    ____________________________________________________________
 
     ____________________________________________________________

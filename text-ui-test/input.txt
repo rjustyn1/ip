@@ -6,4 +6,10 @@ unmark 1
 deadline project /by Sunday
 event meeting /from Monday /to Wednesday
 list
+todo
+deadline
+event
+blah
+mark 99
+unmark abc
 bye
