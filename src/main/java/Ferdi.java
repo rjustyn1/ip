@@ -24,9 +24,11 @@ public class Ferdi {
 
         String command = scanner.nextLine();
         while (!command.equals("bye")) {
-            String[] parsedCommand = command.split(" ");
+            String[] parsedCommand = command.split(" ", 2);
+            String commandArgs = parsedCommand.length > 1 ? parsedCommand[1] : "";
 
             System.out.println("   ____________________________________________________________\n");
+
             if (parsedCommand[0].equals("list")) {
                 if (taskCount == 0) {
                     System.out.println("    You have no tasks in your list.");
@@ -39,53 +41,70 @@ public class Ferdi {
                 }
             }
             else if (parsedCommand[0].equals("todo")){
-                String description = command.substring(5);
-                ToDo newTask = new ToDo(description);
-                taskList[taskCount] = newTask;
-                taskCount++;
-                System.out.println("    Got it. I've added this task:");
-                System.out.println("      " + newTask.toString());
-                System.out.println("    Now you have " + taskCount + " tasks in the list.");
+                try {
+                    ToDo newTask = ToDo.createFromCommand(commandArgs);
+                    taskList[taskCount] = newTask;
+                    taskCount++;
+                    System.out.println("    Got it. I've added this task:");
+                    System.out.println("      " + newTask.toString());
+                    System.out.println("    Now you have " + taskCount + " tasks in the list.");
+                } catch (IllegalArgumentException e) {
+                    System.out.println("    " + e.getMessage());
+                }
             }
             else if (parsedCommand[0].equals("deadline")){
-                String[] parts = command.substring(9).split(" /by ");
-                String description = parts[0];
-                String by = parts[1];
-                Deadline newTask = new Deadline(description, by);
-                taskList[taskCount] = newTask;
-                taskCount++;
-                System.out.println("    Got it. I've added this task:");
-                System.out.println("      " + newTask.toString());
-                System.out.println("    Now you have " + taskCount + " tasks in the list.");
+                try {
+                    Deadline newTask = Deadline.createFromCommand(commandArgs);
+                    taskList[taskCount] = newTask;
+                    taskCount++;
+                    System.out.println("    Got it. I've added this task:");
+                    System.out.println("      " + newTask.toString());
+                    System.out.println("    Now you have " + taskCount + " tasks in the list.");
+                } catch (IllegalArgumentException e) {
+                    System.out.println("    " + e.getMessage());
+                }
             }
             else if (parsedCommand[0].equals("event")){
-                String[] parts = command.substring(6).split(" /from | /to ");
-                String description = parts[0];
-                String from = parts[1];
-                String to = parts[2];
-                Event newTask = new Event(description, from, to);
-                taskList[taskCount] = newTask;
-                taskCount++;
-                System.out.println("    Got it. I've added this task:");
-                System.out.println("      " + newTask.toString());
-                System.out.println("    Now you have " + taskCount + " tasks in the list.");
-
+                try {
+                    Event newTask = Event.createFromCommand(commandArgs);
+                    taskList[taskCount] = newTask;
+                    taskCount++;
+                    System.out.println("    Got it. I've added this task:");
+                    System.out.println("      " + newTask.toString());
+                    System.out.println("    Now you have " + taskCount + " tasks in the list.");
+                } catch (IllegalArgumentException e) {
+                    System.out.println("    " + e.getMessage());
+                }
             }
             else if (parsedCommand[0].equals("mark")){
-                int taskNum = Integer.parseInt(parsedCommand[1]);
-                taskList[taskNum - 1].mark();
-                System.out.println("    Nice! I've marked this task as done:");
-                System.out.println("    " + taskList[taskNum - 1].toString());
+                try {
+                    int taskNum = Integer.parseInt(parsedCommand[1]);
+                    taskList[taskNum - 1].mark();
+                    System.out.println("    Nice! I've marked this task as done:");
+                    System.out.println("    " + taskList[taskNum - 1].toString());
+                } catch (NumberFormatException e) {
+                    System.out.println("    OOPS!!! Please provide a valid task number to mark.");
+                } catch (Exception e) {
+                    System.out.println("    There are only " + taskCount + " tasks in the list.");
+                    System.out.println("You cannot mark task number " + parsedCommand[1] + "." );
+                }
             }
             else if (parsedCommand[0].equals("unmark")){
-                int taskNum = Integer.parseInt(parsedCommand[1]);
-                taskList[taskNum - 1].unmark();
-                System.out.println("    OK, I've marked this task as not done yet:");
-                System.out.println("    " + taskList[taskNum - 1].toString());
+                try {
+                    int taskNum = Integer.parseInt(parsedCommand[1]);
+                    taskList[taskNum - 1].unmark();
+                    System.out.println("    OK, I've marked this task as not done yet:");
+                    System.out.println("    " + taskList[taskNum - 1].toString());
+                } catch (NumberFormatException e) {
+                    System.out.println("    OOPS!!! Please provide a valid task number to mark.");
+                } catch (Exception e) {
+                    System.out.println("    There are only " + taskCount + " tasks in the list.");
+                    System.out.println("    You cannot mark task number " + parsedCommand[1] + "." );
+                }
             }
             else {
                 System.out.println("    " + "Unknown command: " + parsedCommand[0]);
-                System.out.println("    " + "Please try again.");
+                System.out.println("    " + "Please try again, with \"todo\", \"deadline\", \"event\", \"mark\", \"unmark\", \"list\", or \"bye\".");
             }
 
             System.out.println("   ____________________________________________________________\n");
