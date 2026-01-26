@@ -1,4 +1,7 @@
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Ferdi {
     public static void main(String[] args) {
@@ -98,9 +101,47 @@ public class Ferdi {
                     System.out.println("    You cannot mark task number " + parsedCommand[1] + "." );
                 }
             }
+            else if (parsedCommand[0].equals("today")){
+                LocalDate today = LocalDate.now();
+                boolean found = false;
+                System.out.println("    Tasks due or happening today (" + today.format(DateTimeFormatter.ofPattern("MMM dd yyyy")) + "):");
+                for (int i = 0; i < storage.size(); i++) {
+                    Task t = storage.getTask(i);
+                    if (matchesDate(t, today)) {
+                        System.out.println("    " + (i + 1) + ". " + t.toString());
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    System.out.println("    No tasks for today.");
+                }
+            }
+            else if (parsedCommand[0].equals("on")){
+                if (commandArgs.isEmpty()) {
+                    System.out.println("    OOPS!!! Please provide a date in yyyy-MM-dd format (e.g., 2019-12-02).");
+                } else {
+                    try {
+                        LocalDate searchDate = LocalDate.parse(commandArgs.trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                        boolean found = false;
+                        System.out.println("    Tasks on " + searchDate.format(DateTimeFormatter.ofPattern("MMM dd yyyy")) + ":");
+                        for (int i = 0; i < storage.size(); i++) {
+                            Task t = storage.getTask(i);
+                            if (matchesDate(t, searchDate)) {
+                                System.out.println("    " + (i + 1) + ". " + t.toString());
+                                found = true;
+                            }
+                        }
+                        if (!found) {
+                            System.out.println("    No tasks found for that date.");
+                        }
+                    } catch (DateTimeParseException e) {
+                        System.out.println("    OOPS!!! Please provide date in yyyy-MM-dd format (e.g., 2019-12-02).");
+                    }
+                }
+            }
             else {
                 System.out.println("    " + "Unknown command: " + parsedCommand[0]);
-                System.out.println("    " + "Please try again, with \"todo\", \"deadline\", \"event\", \"mark\", \"unmark\", \"list\", or \"bye\".");
+                System.out.println("    " + "Please try again, with \"todo\", \"deadline\", \"event\", \"mark\", \"unmark\", \"list\", \"today\", \"on\", or \"bye\".");
             }
 
             System.out.println("   ____________________________________________________________\n");
@@ -113,5 +154,17 @@ public class Ferdi {
             "   ____________________________________________________________\n";
         
         System.out.println(greetEnd);
+    }
+
+    // Helper method to check if a task matches a given date
+    private static boolean matchesDate(Task task, LocalDate date) {
+        if (task instanceof Deadline) {
+            Deadline d = (Deadline) task;
+            return d.by.equals(date);
+        } else if (task instanceof Event) {
+            Event e = (Event) task;
+            return e.from.equals(date) || e.to.equals(date);
+        }
+        return false;
     }
 }
