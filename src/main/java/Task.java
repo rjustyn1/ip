@@ -43,4 +43,10 @@ public abstract class Task {
     public String toString() {
         return "[" + getStatusIcon() + "] " + description;
     }
+
+    /**
+     * Returns the file format representation of this task.
+     * To be overridden by subclasses.
+     */
+    public abstract String toFileFormat();
 }
