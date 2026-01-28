@@ -1,117 +1,94 @@
 import java.util.Scanner;
 
 public class Ferdi {
-    public static void main(String[] args) {
+    private final Storage storage;
+    private final TaskList tasks;
+    private final Ui ui;
+
+    public Ferdi(String filePath) {
+        this.ui = new Ui();
+        this.storage = new Storage(filePath);
+        this.tasks = storage.load();
+    }
+
+    public void run() {
         Scanner scanner = new Scanner(System.in);
-        Storage storage = new Storage("./src/main/java/data/ferdi.txt");
-
-        String logo = " ______           _ _\n" +
-            "|  ____|         | (_)\n" +
-            "| |__ ___ _ __ __| |_ \n" +
-            "|  __/ _ \\ '__/ _` | |\n" +
-            "| | |  __/ |   (_| | |\n" +
-            "|_|  \\___|_|  \\__,_|_|\n";
-
-        System.out.println("Hello from\n" + logo);
-
-        String greetStart = "   ____________________________________________________________\n" +
-            "   Hello! I think I my name is Ferdi\n" +
-            "   What can I do for you?\n" +
-            "   ____________________________________________________________\n";
-
-        System.out.println(greetStart);
+        ui.greetStart();
 
         String command = scanner.nextLine();
         while (!command.equals("bye")) {
-            String[] parsedCommand = command.split(" ", 2);
-            String commandArgs = parsedCommand.length > 1 ? parsedCommand[1] : "";
+            String[] parsed = Parser.parse(command);
+            String parsedCommand = parsed[0];
+            String commandArgs = parsed[1];
 
-            System.out.println("   ____________________________________________________________\n");
+            ui.printLine();
 
-            if (parsedCommand[0].equals("list")) {
-                if (storage.size() == 0) {
-                    System.out.println("    You have no tasks in your list.");
-                }
-                else {
-                    System.out.println("    Here are the tasks in your list:");
-                }
-                for (int i = 0; i < storage.size(); i++) {
-                    System.out.println("    " + (i + 1) + ". " + storage.getTask(i).toString());
-                }
-            }
-            else if (parsedCommand[0].equals("todo")){
+            if (parsedCommand.equals("list")) {
+                ui.showTaskList(tasks.getTasks());
+            } else if (parsedCommand.equals("todo")) {
                 try {
                     ToDo newTask = ToDo.createFromCommand(commandArgs);
-                    storage.addTask(newTask);
-                    System.out.println("    Got it. I've added this task:");
-                    System.out.println("      " + newTask.toString());
-                    System.out.println("    Now you have " + storage.size() + " tasks in the list.");
+                    tasks.addTask(newTask);
+                    storage.save(tasks);
+                    ui.showTaskAdded(newTask, tasks.size());
                 } catch (IllegalArgumentException e) {
-                    System.out.println("    " + e.getMessage());
+                    ui.showError(e.getMessage());
                 }
-            }
-            else if (parsedCommand[0].equals("deadline")){
+            } else if (parsedCommand.equals("deadline")) {
                 try {
                     Deadline newTask = Deadline.createFromCommand(commandArgs);
-                    storage.addTask(newTask);
-                    System.out.println("    Got it. I've added this task:");
-                    System.out.println("      " + newTask.toString());
-                    System.out.println("    Now you have " + storage.size() + " tasks in the list.");
+                    tasks.addTask(newTask);
+                    storage.save(tasks);
+                    ui.showTaskAdded(newTask, tasks.size());
                 } catch (IllegalArgumentException e) {
-                    System.out.println("    " + e.getMessage());
+                    ui.showError(e.getMessage());
                 }
-            }
-            else if (parsedCommand[0].equals("event")){
+            } else if (parsedCommand.equals("event")) {
                 try {
                     Event newTask = Event.createFromCommand(commandArgs);
-                    storage.addTask(newTask);
-                    System.out.println("    Got it. I've added this task:");
-                    System.out.println("      " + newTask.toString());
-                    System.out.println("    Now you have " + storage.size() + " tasks in the list.");
+                    tasks.addTask(newTask);
+                    storage.save(tasks);
+                    ui.showTaskAdded(newTask, tasks.size());
                 } catch (IllegalArgumentException e) {
-                    System.out.println("    " + e.getMessage());
+                    ui.showError(e.getMessage());
                 }
-            }
-            else if (parsedCommand[0].equals("mark")){
+            } else if (parsedCommand.equals("mark")) {
                 try {
-                    int taskNum = Integer.parseInt(parsedCommand[1]);
-                    storage.markTask(taskNum - 1);
-                    System.out.println("    Nice! I've marked this task as done:");
-                    System.out.println("    " + storage.getTask(taskNum - 1).toString());
+                    int taskNum = Integer.parseInt(commandArgs);
+                    tasks.markTask(taskNum - 1);
+                    storage.save(tasks);
+                    ui.showMarked(tasks.getTask(taskNum - 1));
                 } catch (NumberFormatException e) {
-                    System.out.println("    OOPS!!! Please provide a valid task number to mark.");
+                    ui.showError("OOPS!!! Please provide a valid task number to mark.");
                 } catch (Exception e) {
-                    System.out.println("    There are only " + storage.size() + " tasks in the list.");
-                    System.out.println("    You cannot mark task number " + parsedCommand[1] + "." );
+                    ui.showError("There are only " + tasks.size() + " tasks in the list.");
+                    ui.showError("You cannot mark task number " + commandArgs + ".");
                 }
-            }
-            else if (parsedCommand[0].equals("unmark")){
+            } else if (parsedCommand.equals("unmark")) {
                 try {
-                    int taskNum = Integer.parseInt(parsedCommand[1]);
-                    storage.unmarkTask(taskNum - 1);
-                    System.out.println("    OK, I've marked this task as not done yet:");
-                    System.out.println("    " + storage.getTask(taskNum - 1).toString());
+                    int taskNum = Integer.parseInt(commandArgs);
+                    tasks.unmarkTask(taskNum - 1);
+                    storage.save(tasks);
+                    ui.showUnmarked(tasks.getTask(taskNum - 1));
                 } catch (NumberFormatException e) {
-                    System.out.println("    OOPS!!! Please provide a valid task number to mark.");
+                    ui.showError("OOPS!!! Please provide a valid task number to unmark.");
                 } catch (Exception e) {
-                    System.out.println("    There are only " + storage.size() + " tasks in the list.");
-                    System.out.println("    You cannot mark task number " + parsedCommand[1] + "." );
+                    ui.showError("There are only " + tasks.size() + " tasks in the list.");
+                    ui.showError("You cannot unmark task number " + commandArgs + ".");
                 }
-            }
-            else {
-                System.out.println("    " + "Unknown command: " + parsedCommand[0]);
-                System.out.println("    " + "Please try again, with \"todo\", \"deadline\", \"event\", \"mark\", \"unmark\", \"list\", or \"bye\".");
+            } else {
+                ui.showUnknownCommand(parsedCommand);
             }
 
-            System.out.println("   ____________________________________________________________\n");
-
+            ui.printLine();
             command = scanner.nextLine();
         }
 
-        String greetEnd = "    ____________________________________________________________\n" +
-            "   Bye. Hope to see you again soon!\n" +
-            "   ____________________________________________________________\n";
-        
-        System.out.println(greetEnd);
+        ui.greetEnd();
+        scanner.close();
+    }
+
+    public static void main(String[] commandArgs) {
+        new Ferdi("./src/main/java/data/ferdi.txt").run();
     }
 }

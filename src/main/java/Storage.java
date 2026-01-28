@@ -11,61 +11,23 @@ import java.util.ArrayList;
  */
 public class Storage {
     private final String filePath;
-    private final ArrayList<Task> tasks;
 
     /**
      * Create storage pointing to a relative path like "data/duke.txt".
      */
     public Storage(String relativePath) {
         this.filePath = relativePath;
-        this.tasks = loadFromDisk();
     }
 
     /**
-     * Return a shallow copy of tasks for read-only display.
+     * Load tasks from disk into a TaskList. Returns an empty list if none exists.
      */
-    public ArrayList<Task> getTasks() {
-        return new ArrayList<>(tasks);
-    }
-
-    public int size() {
-        return tasks.size();
-    }
-
-    public Task getTask(int index) {
-        return tasks.get(index);
-    }
-
-    /**
-     * Add a task and persist immediately.
-     */
-    public void addTask(Task task) {
-        tasks.add(task);
-        saveToDisk();
-    }
-
-    /**
-     * Mark a task as done by 0-based index and persist.
-     */
-    public void markTask(int index) {
-        tasks.get(index).mark();
-        saveToDisk();
-    }
-
-    /**
-     * Unmark a task by 0-based index and persist.
-     */
-    public void unmarkTask(int index) {
-        tasks.get(index).unmark();
-        saveToDisk();
-    }
-
-    private ArrayList<Task> loadFromDisk() {
+    public TaskList load() {
         ArrayList<Task> loaded = new ArrayList<>();
         File file = new File(filePath);
         ensureParentDirectoryExists(file);
         if (!file.exists()) {
-            return loaded;
+            return new TaskList(loaded);
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -83,18 +45,18 @@ public class Storage {
         } catch (IOException e) {
             System.out.println("Error loading tasks: " + e.getMessage());
         }
-        return loaded;
+        return new TaskList(loaded);
     }
 
     /**
-     * Save current tasks to disk. Creates folders/files as needed.
+     * Save the provided task list to disk. Creates folders/files as needed.
      */
-    private void saveToDisk() {
+    public void save(TaskList taskList) {
         File file = new File(filePath);
         ensureParentDirectoryExists(file);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            for (Task task : tasks) {
+            for (Task task : taskList.getTasks()) {
                 writer.write(task.toFileFormat());
                 writer.newLine();
             }
