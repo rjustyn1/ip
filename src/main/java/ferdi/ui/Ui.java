@@ -1,4 +1,8 @@
+package ferdi.ui;
+
 import java.util.ArrayList;
+
+import ferdi.task.Task;
 
 public class Ui {
     private static final String LINE = "   ____________________________________________________________";
@@ -12,6 +16,7 @@ public class Ui {
     public void greetStart() {
         System.out.println("Hello from\n" + LOGO);
         printLine();
+        System.out.println();
         System.out.println("   Hello! I think I my name is Ferdi");
         System.out.println("   What can I do for you?");
         printLine();
@@ -19,12 +24,13 @@ public class Ui {
 
     public void greetEnd() {
         printLine();
+        System.out.println();
         System.out.println("   Bye. Hope to see you again soon!");
         printLine();
     }
 
     public void printLine() {
-        System.out.println(LINE + "\n");
+        System.out.println(LINE);
     }
 
     public void showTaskList(ArrayList<Task> tasks) {

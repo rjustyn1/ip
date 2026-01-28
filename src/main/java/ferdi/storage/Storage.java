@@ -1,3 +1,5 @@
+package ferdi.storage;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -5,6 +7,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import ferdi.task.Deadline;
+import ferdi.task.Event;
+import ferdi.task.Task;
+import ferdi.task.TaskList;
+import ferdi.task.ToDo;
 
 /**
  * Handles loading tasks from and saving tasks to disk.

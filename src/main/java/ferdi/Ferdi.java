@@ -1,4 +1,14 @@
+package ferdi;
+
 import java.util.Scanner;
+
+import ferdi.parser.Parser;
+import ferdi.storage.Storage;
+import ferdi.task.Deadline;
+import ferdi.task.Event;
+import ferdi.task.TaskList;
+import ferdi.task.ToDo;
+import ferdi.ui.Ui;
 
 public class Ferdi {
     private final Storage storage;

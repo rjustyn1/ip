@@ -1,3 +1,5 @@
+package ferdi.parser;
+
 /**
  * Deals with parsing user input into command word and arguments.
  */

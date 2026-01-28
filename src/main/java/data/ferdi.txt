@@ -1,3 +1,4 @@
 T | 1 | return book
 T | 0 | buy book
 E | 0 | go to mass | 9am | 1030am
+T | 0 | return book
