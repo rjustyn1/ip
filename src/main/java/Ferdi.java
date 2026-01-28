@@ -1,4 +1,7 @@
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Ferdi {
     private final Storage storage;
@@ -90,5 +93,17 @@ public class Ferdi {
 
     public static void main(String[] commandArgs) {
         new Ferdi("./src/main/java/data/ferdi.txt").run();
+    }
+
+    // Helper method to check if a task matches a given date
+    private static boolean matchesDate(Task task, LocalDate date) {
+        if (task instanceof Deadline) {
+            Deadline d = (Deadline) task;
+            return d.by.equals(date);
+        } else if (task instanceof Event) {
+            Event e = (Event) task;
+            return e.from.equals(date) || e.to.equals(date);
+        }
+        return false;
     }
 }
