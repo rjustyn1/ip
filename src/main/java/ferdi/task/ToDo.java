@@ -1,12 +1,24 @@
 package ferdi.task;
 
+/**
+ * Represents a simple to-do task without date metadata.
+ */
 public class ToDo extends Task {
+    /**
+     * Creates a to-do with the given description.
+     *
+     * @param description task description
+     */
     public ToDo(String description) {
         super(description);
     }
 
     /**
      * Creates a ToDo task from a command string.
+     *
+     * @param commandArgs user-provided arguments after the command word
+     * @return parsed to-do task
+     * @throws IllegalArgumentException if description is missing
      */
     public static ToDo createFromCommand(String commandArgs) throws IllegalArgumentException {
         if (commandArgs == null || commandArgs.trim().isEmpty()) {

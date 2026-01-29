@@ -10,6 +10,8 @@ public abstract class Task {
     /**
      * Creates a new task with the given description.
      * The task is initially marked as not done.
+     *
+     * @param description text describing the task
      */
     public Task(String description) {
         this.description = description;
@@ -18,13 +20,15 @@ public abstract class Task {
 
     /**
      * Returns the status icon for this task.
+     *
+     * @return "X" when done, or space when not done
      */
     public String getStatusIcon() {
         return (isDone ? "X" : " ");
     }
 
     /**
-     * Marks task as done
+     * Marks task as done.
      */
     public void mark() {
         this.isDone = true;
@@ -40,6 +44,8 @@ public abstract class Task {
     /**
      * Returns a string representation of this task.
      * For printing purposes.
+     *
+     * @return display-friendly text including status and description
      */
     @Override
     public String toString() {
@@ -49,6 +55,8 @@ public abstract class Task {
     /**
      * Returns the file format representation of this task.
      * To be overridden by subclasses.
+     *
+     * @return pipe-delimited representation for persistence
      */
     public abstract String toFileFormat();
 }

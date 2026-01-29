@@ -10,17 +10,29 @@ import ferdi.task.TaskList;
 import ferdi.task.ToDo;
 import ferdi.ui.Ui;
 
+/**
+ * Entry point for the Ferdi task manager CLI application.
+ */
 public class Ferdi {
     private final Storage storage;
     private final TaskList tasks;
     private final Ui ui;
 
+    /**
+     * Constructs the app with storage bound to the provided file path.
+     * Loads any existing tasks into memory before running.
+     *
+     * @param filePath path to the data file
+     */
     public Ferdi(String filePath) {
         this.ui = new Ui();
         this.storage = new Storage(filePath);
         this.tasks = storage.load();
     }
 
+    /**
+     * Starts the interactive loop until the user types "bye".
+     */
     public void run() {
         Scanner scanner = new Scanner(System.in);
         ui.greetStart();
@@ -98,6 +110,11 @@ public class Ferdi {
         scanner.close();
     }
 
+    /**
+     * Bootstraps the application.
+     *
+     * @param commandArgs command line arguments (unused)
+     */
     public static void main(String[] commandArgs) {
         new Ferdi("./src/main/java/data/ferdi.txt").run();
     }

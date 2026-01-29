@@ -22,6 +22,8 @@ public class Storage {
 
     /**
      * Create storage pointing to a relative path like "data/duke.txt".
+     *
+     * @param relativePath path to the backing data file
      */
     public Storage(String relativePath) {
         this.filePath = relativePath;
@@ -29,6 +31,8 @@ public class Storage {
 
     /**
      * Load tasks from disk into a TaskList. Returns an empty list if none exists.
+     *
+     * @return tasks loaded from disk
      */
     public TaskList load() {
         ArrayList<Task> loaded = new ArrayList<>();
@@ -58,6 +62,8 @@ public class Storage {
 
     /**
      * Save the provided task list to disk. Creates folders/files as needed.
+     *
+     * @param taskList tasks to persist
      */
     public void save(TaskList taskList) {
         File file = new File(filePath);
@@ -73,6 +79,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Ensures the parent directory for the file exists.
+     *
+     * @param file target file path
+     */
     private void ensureParentDirectoryExists(File file) {
         File parent = file.getParentFile();
         if (parent != null && !parent.exists()) {
@@ -80,6 +91,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Parses a persisted task line into a Task instance.
+     *
+     * @param line raw line from storage
+     * @return parsed task or null if line is invalid
+     */
     private Task parse(String line) {
         String[] parts = line.split(" \\| ");
         if (parts.length < 3) {
