@@ -1,8 +1,17 @@
 package ferdi.task;
 
+/**
+ * Represents a task with a due date.
+ */
 public class Deadline extends Task {
     protected String by;
 
+    /**
+     * Creates a deadline with description and due date text.
+     *
+     * @param description task description
+     * @param by textual due date
+     */
     public Deadline(String description, String by) {
         super(description);
         this.by = by;
@@ -10,6 +19,10 @@ public class Deadline extends Task {
 
     /**
      * Creates a Deadline task from a command string.
+     *
+     * @param commandArgs user-provided arguments after the command word
+     * @return parsed deadline task
+     * @throws IllegalArgumentException if description or /by component is missing
      */
     public static Deadline createFromCommand(String commandArgs) throws IllegalArgumentException {
         if (commandArgs == null || commandArgs.trim().isEmpty()) {

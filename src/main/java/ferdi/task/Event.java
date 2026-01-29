@@ -1,9 +1,19 @@
 package ferdi.task;
 
+/**
+ * Represents an event with a start and end time.
+ */
 public class Event extends Task {
     protected String from;
     protected String to;
 
+    /**
+     * Creates an event with description, start time, and end time.
+     *
+     * @param description task description
+     * @param from start time text
+     * @param to end time text
+     */
     public Event(String description, String from, String to) {
         super(description);
         this.from = from;
@@ -12,6 +22,10 @@ public class Event extends Task {
 
     /**
      * Creates an Event task from a command string.
+     *
+     * @param commandArgs user-provided arguments after the command word
+     * @return parsed event task
+     * @throws IllegalArgumentException if description, /from, or /to components are missing
      */
     public static Event createFromCommand(String commandArgs) throws IllegalArgumentException {
         if (commandArgs == null || commandArgs.trim().isEmpty()) {

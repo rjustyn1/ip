@@ -6,6 +6,9 @@ package ferdi.parser;
 public class Parser {
     /**
      * Splits the raw user input into command word and command arguments.
+     *
+     * @param input full user input line
+     * @return two-element array of command word and remaining arguments (may be empty)
      */
     public static String[] parse(String input) {
         if (input == null) {

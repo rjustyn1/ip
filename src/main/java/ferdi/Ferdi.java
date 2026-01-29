@@ -10,6 +10,9 @@ import ferdi.task.TaskList;
 import ferdi.task.ToDo;
 import ferdi.ui.Ui;
 
+/**
+ * Entry point for the Ferdi task manager CLI application.
+ */
 public class Ferdi {
     private static final String CMD_BYE = "bye";
     private static final String CMD_LIST = "list";
@@ -18,18 +21,28 @@ public class Ferdi {
     private static final String CMD_EVENT = "event";
     private static final String CMD_MARK = "mark";
     private static final String CMD_UNMARK = "unmark";
+    private static final String CMD_FIND = "find";
     private static final String DEFAULT_DATA_PATH = "./src/main/java/data/ferdi.txt";
 
     private final Storage storage;
     private final TaskList tasks;
     private final Ui ui;
 
+    /**
+     * Constructs the app with storage bound to the provided file path.
+     * Loads any existing tasks into memory before running.
+     *
+     * @param filePath path to the data file
+     */
     public Ferdi(String filePath) {
         this.ui = new Ui();
         this.storage = new Storage(filePath);
         this.tasks = storage.load();
     }
 
+    /**
+     * Starts the interactive loop until the user types "bye".
+     */
     public void run() {
         Scanner scanner = new Scanner(System.in);
         ui.greetStart();
@@ -95,6 +108,12 @@ public class Ferdi {
                     ui.showError("There are only " + tasks.size() + " tasks in the list.");
                     ui.showError("You cannot unmark task number " + commandArgs + ".");
                 }
+            } else if (parsedCommand.equals(CMD_FIND)) {
+                if (commandArgs.trim().isEmpty()) {
+                    ui.showError("OOPS!!! Please provide a keyword to find.");
+                } else {
+                    ui.showMatchingTasks(tasks.findTasks(commandArgs.trim()));
+                }
             } else {
                 ui.showUnknownCommand(parsedCommand);
             }
@@ -107,6 +126,11 @@ public class Ferdi {
         scanner.close();
     }
 
+    /**
+     * Bootstraps the application.
+     *
+     * @param commandArgs command line arguments (unused)
+     */
     public static void main(String[] commandArgs) {
         new Ferdi(DEFAULT_DATA_PATH).run();
     }
