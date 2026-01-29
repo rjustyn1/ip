@@ -28,7 +28,15 @@ public abstract class Task {
     }
 
     /**
-     * Marks task as done.
+     * Returns the description of this task.
+     */
+
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Marks task as done
      */
     public void mark() {
         this.isDone = true;
