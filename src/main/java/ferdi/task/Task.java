@@ -24,6 +24,14 @@ public abstract class Task {
     }
 
     /**
+     * Returns the description of this task.
+     */
+
+    public String getDescription() {
+        return description;
+    }
+
+    /**
      * Marks task as done
      */
     public void mark() {
