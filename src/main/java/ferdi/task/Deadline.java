@@ -1,18 +1,24 @@
 package ferdi.task;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 /**
  * Represents a task with a due date.
  */
 public class Deadline extends Task {
-    protected String by;
+    protected LocalDate by;
+    private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy");
 
     /**
-     * Creates a deadline with description and due date text.
+     * Creates a deadline with description and due date.
      *
      * @param description task description
-     * @param by textual due date
+     * @param by due date as LocalDate
      */
-    public Deadline(String description, String by) {
+    public Deadline(String description, LocalDate by) {
         super(description);
         this.by = by;
     }
@@ -35,12 +41,20 @@ public class Deadline extends Task {
         if (parts.length != 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
             throw new IllegalArgumentException("OOPS!!! Description, and date are all required.");
         }
-        return new Deadline(parts[0].trim(), parts[1].trim());
+        String description = parts[0].trim();
+        String dateStr = parts[1].trim();
+        
+        try {
+            LocalDate date = LocalDate.parse(dateStr, INPUT_FORMAT);
+            return new Deadline(description, date);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("OOPS!!! Please use yyyy-MM-dd format for the date (e.g., 2019-12-02).");
+        }
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by + ")";
+        return "[D]" + super.toString() + " (by: " + by.format(OUTPUT_FORMAT) + ")";
     }
 
     @Override
@@ -48,3 +62,4 @@ public class Deadline extends Task {
         return "D | " + (isDone ? "1" : "0") + " | " + description + " | " + by;
     }
 }
+

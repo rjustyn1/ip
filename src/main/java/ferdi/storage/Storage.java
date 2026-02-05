@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import ferdi.task.Deadline;
@@ -112,7 +113,7 @@ public class Storage {
             task = new ToDo(description);
         } else if (type.equals("D")) {
             if (parts.length >= 4) {
-                task = new Deadline(description, parts[3]);
+                task = new Deadline(description, LocalDate.parse(parts[3]));
             }
         } else if (type.equals("E")) {
             if (parts.length >= 5) {
