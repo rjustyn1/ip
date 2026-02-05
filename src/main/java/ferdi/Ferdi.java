@@ -1,5 +1,6 @@
 package ferdi;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import ferdi.parser.Parser;
@@ -130,7 +131,104 @@ public class Ferdi {
      * Generates a response for the user's chat message.
      */
     public String getResponse(String input) {
-        return "Ferdi heard: " + input;
+        if (input.equals(CMD_BYE)) {
+            return "Bye. Hope to see you again soon!";
+        }
+
+        String[] parsed = Parser.parse(input);
+        String parsedCommand = parsed[0];
+        String commandArgs = parsed[1];
+
+        StringBuilder response = new StringBuilder();
+
+        if (parsedCommand.equals(CMD_LIST)) {
+            if (tasks.getTasks().isEmpty()) {
+                response.append("You have no tasks in your list.");
+            } else {
+                response.append("Here are the tasks in your list:\n");
+                for (int i = 0; i < tasks.size(); i++) {
+                    response.append((i + 1)).append(". ").append(tasks.getTask(i).toString()).append("\n");
+                }
+            }
+        } else if (parsedCommand.equals(CMD_TODO)) {
+            try {
+                ToDo newTask = ToDo.createFromCommand(commandArgs);
+                tasks.addTask(newTask);
+                storage.save(tasks);
+                response.append("Got it. I've added this task:\n  ")
+                        .append(newTask.toString())
+                        .append("\nNow you have ").append(tasks.size()).append(" tasks in the list.");
+            } catch (IllegalArgumentException e) {
+                response.append(e.getMessage());
+            }
+        } else if (parsedCommand.equals(CMD_DEADLINE)) {
+            try {
+                Deadline newTask = Deadline.createFromCommand(commandArgs);
+                tasks.addTask(newTask);
+                storage.save(tasks);
+                response.append("Got it. I've added this task:\n  ")
+                        .append(newTask.toString())
+                        .append("\nNow you have ").append(tasks.size()).append(" tasks in the list.");
+            } catch (IllegalArgumentException e) {
+                response.append(e.getMessage());
+            }
+        } else if (parsedCommand.equals(CMD_EVENT)) {
+            try {
+                Event newTask = Event.createFromCommand(commandArgs);
+                tasks.addTask(newTask);
+                storage.save(tasks);
+                response.append("Got it. I've added this task:\n  ")
+                        .append(newTask.toString())
+                        .append("\nNow you have ").append(tasks.size()).append(" tasks in the list.");
+            } catch (IllegalArgumentException e) {
+                response.append(e.getMessage());
+            }
+        } else if (parsedCommand.equals(CMD_MARK)) {
+            try {
+                int taskNum = Integer.parseInt(commandArgs);
+                tasks.markTask(taskNum - 1);
+                storage.save(tasks);
+                response.append("Nice! I've marked this task as done:\n")
+                        .append(tasks.getTask(taskNum - 1).toString());
+            } catch (NumberFormatException e) {
+                response.append("OOPS!!! Please provide a valid task number to mark.");
+            } catch (Exception e) {
+                response.append("There are only ").append(tasks.size()).append(" tasks in the list.\n")
+                        .append("You cannot mark task number ").append(commandArgs).append(".");
+            }
+        } else if (parsedCommand.equals(CMD_UNMARK)) {
+            try {
+                int taskNum = Integer.parseInt(commandArgs);
+                tasks.unmarkTask(taskNum - 1);
+                storage.save(tasks);
+                response.append("OK, I've marked this task as not done yet:\n")
+                        .append(tasks.getTask(taskNum - 1).toString());
+            } catch (NumberFormatException e) {
+                response.append("OOPS!!! Please provide a valid task number to unmark.");
+            } catch (Exception e) {
+                response.append("There are only ").append(tasks.size()).append(" tasks in the list.\n")
+                        .append("You cannot unmark task number ").append(commandArgs).append(".");
+            }
+        } else if (parsedCommand.equals(CMD_FIND)) {
+            if (commandArgs.trim().isEmpty()) {
+                response.append("OOPS!!! Please provide a keyword to find.");
+            } else {
+                ArrayList<ferdi.task.Task> matchingTasks = tasks.findTasks(commandArgs.trim());
+                if (matchingTasks.isEmpty()) {
+                    response.append("No matching tasks found.");
+                } else {
+                    response.append("Here are the matching tasks in your list:\n");
+                    for (int i = 0; i < matchingTasks.size(); i++) {
+                        response.append((i + 1)).append(". ").append(matchingTasks.get(i).toString()).append("\n");
+                    }
+                }
+            }
+        } else {
+            response.append("Unknown command: ").append(parsedCommand)
+                    .append("\nPlease try again, with \"todo\", \"deadline\", \"event\", \"mark\", \"unmark\", \"list\", \"find\", or \"bye\".");
+        }
+
+        return response.toString();
     }
 
     /**
