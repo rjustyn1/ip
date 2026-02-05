@@ -44,20 +44,20 @@ test {
 }
 
 application {
-    mainClass.set("ferdi.Ferdi")
+    mainClass.set("ferdi.Launcher")
 }
 
 shadowJar {
     archiveBaseName = "Ferdi"
     archiveClassifier = null
     manifest {
-        attributes('Main-Class': 'ferdi.Ferdi')
+        attributes('Main-Class': 'ferdi.Launcher')
     }
 }
 
 jar {
     manifest {
-        attributes('Main-Class': 'ferdi.Ferdi')
+        attributes('Main-Class': 'ferdi.Launcher')
     }
     archiveBaseName = "Ferdi"
 }
