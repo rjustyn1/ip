@@ -1,0 +1,57 @@
+.root {
+    -fx-background-color: #f4f5f7;
+    -fx-background-image: url("/images/DaWallpaper.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 200px 200px;
+    -fx-background-position: center center;
+}
+
+.scroll-pane {
+    -fx-background: transparent;
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.text-field {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 18;
+    -fx-padding: 8 12 8 12;
+    -fx-border-color: #d0d4d8;
+    -fx-border-radius: 18;
+}
+
+.button {
+    -fx-background-color: #4c8bf5;
+    -fx-background-radius: 18;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.dialog-box {
+    -fx-padding: 6 10 6 10;
+    -fx-spacing: 10;
+}
+
+.dialog-text {
+    -fx-background-radius: 12;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 13px;
+    -fx-text-fill: #000000;
+}
+
+.user-dialog .dialog-text {
+    -fx-background-color: #d9fdd3;
+}
+
+.ferdi-dialog .dialog-text {
+    -fx-background-color: #ffffff;
+}
+
+.dialog-image {
+    -fx-fit-height: 70;
+    -fx-fit-width: 70;
+    -fx-smooth: true;
+}
