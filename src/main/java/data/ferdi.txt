@@ -2,3 +2,7 @@ T | 1 | return book
 T | 0 | buy book
 E | 0 | go to mass | 9am | 1030am
 T | 0 | return book
+T | 0 | return book
+T | 0 | buy book
+D | 0 | go to library | 2026-02-05
+D | 0 | study CS2103 | 2026-02-06
