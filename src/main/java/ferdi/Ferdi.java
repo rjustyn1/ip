@@ -127,6 +127,13 @@ public class Ferdi {
     }
 
     /**
+     * Generates a response for the user's chat message.
+     */
+    public String getResponse(String input) {
+        return "Ferdi heard: " + input;
+    }
+
+    /**
      * Bootstraps the application.
      *
      * @param commandArgs command line arguments (unused)

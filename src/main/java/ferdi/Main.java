@@ -21,7 +21,8 @@ public class Main extends Application {
     private Scene scene;
 
     private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
-    private final Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaFerdi.png"));
+    private final Image ferdiImage = new Image(this.getClass().getResourceAsStream("/images/DaFerdi.png"));
+    private final Ferdi ferdi = new Ferdi("./src/main/java/data/ferdi.txt");
 
 
     @Override
@@ -86,7 +87,12 @@ public class Main extends Application {
      * the dialog container. Clears the user input after processing.
      */
     private void handleUserInput() {
-        dialogContainer.getChildren().addAll(new DialogBox(userInput.getText(), userImage));
+        String userText = userInput.getText();
+        String ferdiText = ferdi.getResponse(userText);
+        dialogContainer.getChildren().addAll(
+                new DialogBox(userText, userImage),
+                new DialogBox(ferdiText, ferdiImage)
+        );
         userInput.clear();
     }
 }
