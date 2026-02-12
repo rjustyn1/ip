@@ -19,6 +19,14 @@ import ferdi.task.ToDo;
  * Handles loading tasks from and saving tasks to disk.
  */
 public class Storage {
+    private static final String TASK_TYPE_TODO = "T";
+    private static final String TASK_TYPE_DEADLINE = "D";
+    private static final String TASK_TYPE_EVENT = "E";
+    private static final String DONE_MARKER = "1";
+    private static final int MIN_PARTS_LENGTH = 3;
+    private static final int DEADLINE_PARTS_LENGTH = 4;
+    private static final int EVENT_PARTS_LENGTH = 5;
+    
     private final String filePath;
 
     /**
@@ -100,25 +108,21 @@ public class Storage {
      */
     private Task parse(String line) {
         String[] parts = line.split(" \\| ");
-        if (parts.length < 3) {
+        if (parts.length < MIN_PARTS_LENGTH) {
             return null;
         }
 
         String type = parts[0];
-        boolean isDone = parts[1].trim().equals("1");
+        boolean isDone = parts[1].trim().equals(DONE_MARKER);
         String description = parts[2];
         Task task = null;
 
-        if (type.equals("T")) {
+        if (type.equals(TASK_TYPE_TODO)) {
             task = new ToDo(description);
-        } else if (type.equals("D")) {
-            if (parts.length >= 4) {
-                task = new Deadline(description, LocalDate.parse(parts[3]));
-            }
-        } else if (type.equals("E")) {
-            if (parts.length >= 5) {
-                task = new Event(description, parts[3], parts[4]);
-            }
+        } else if (type.equals(TASK_TYPE_DEADLINE) && parts.length >= DEADLINE_PARTS_LENGTH) {
+            task = new Deadline(description, LocalDate.parse(parts[3]));
+        } else if (type.equals(TASK_TYPE_EVENT) && parts.length >= EVENT_PARTS_LENGTH) {
+            task = new Event(description, parts[3], parts[4]);
         }
 
         if (task != null && isDone) {
