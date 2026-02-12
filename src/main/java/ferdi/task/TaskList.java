@@ -40,6 +40,7 @@ public class TaskList {
      * @return task at the requested position
      */
     public Task getTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Index out of bounds: " + index;
         return tasks.get(index);
     }
 
@@ -58,7 +59,9 @@ public class TaskList {
      * @param task task to add
      */
     public void addTask(Task task) {
+        assert task != null : "Cannot add null task";
         tasks.add(task);
+        assert tasks.contains(task) : "Task should be in list after adding";
     }
 
     /**
@@ -82,7 +85,9 @@ public class TaskList {
     }
 
     public void markTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Index out of bounds: " + index;
         tasks.get(index).mark();
+        assert tasks.get(index).isDone() : "Task should be marked as done";
     }
 
     /**
@@ -91,6 +96,8 @@ public class TaskList {
      * @param index zero-based task position
      */
     public void unmarkTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Index out of bounds: " + index;
         tasks.get(index).unmark();
+        assert !tasks.get(index).isDone() : "Task should be unmarked";
     }
 }

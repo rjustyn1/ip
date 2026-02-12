@@ -127,6 +127,7 @@ public class Storage {
 
         if (task != null && isDone) {
             task.mark();
+            assert task.isDone() : "Task should be marked as done after marking";
         }
         return task;
     }
