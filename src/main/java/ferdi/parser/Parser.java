@@ -17,6 +17,8 @@ public class Parser {
         String[] parts = input.split(" ", 2);
         String commandWord = parts.length > 0 ? parts[0] : "";
         String commandArgs = parts.length > 1 ? parts[1] : "";
-        return new String[]{commandWord, commandArgs};
+        String[] result = new String[]{commandWord, commandArgs};
+        assert result.length == 2 : "Parser should always return array of length 2";
+        return result;
     }
 }

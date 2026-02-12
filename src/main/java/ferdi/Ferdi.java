@@ -36,9 +36,11 @@ public class Ferdi {
      * @param filePath path to the data file
      */
     public Ferdi(String filePath) {
+        assert filePath != null : "File path cannot be null";
         this.ui = new Ui();
         this.storage = new Storage(filePath);
         this.tasks = storage.load();
+        assert this.tasks != null : "TaskList should never be null after loading";
     }
 
     /**
