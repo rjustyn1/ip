@@ -135,6 +135,25 @@ public class Ui {
      */
     public void showUnknownCommand(String command) {
         System.out.println("    Unknown command: " + command);
-        System.out.println("    Please try again, with \"todo\", \"deadline\", \"event\", \"mark\", \"unmark\", \"list\", or \"bye\".");
+        System.out.println("    Please try again, with \"todo\", \"deadline\", \"event\", \"mark\", \"unmark\", \"list\", \"find\", \"update\", or \"bye\".");
+    }
+
+    /**
+     * Shows confirmation that a task was updated.
+     *
+     * @param task task that was updated
+     */
+    public void showTaskUpdated(Task task) {
+        System.out.println("    Got it. I've updated this task:");
+        System.out.println("      " + task.toString());
+    }
+
+    /**
+     * Prints a generic message.
+     *
+     * @param message text to display
+     */
+    public void showMessage(String message) {
+        System.out.println("    " + message);
     }
 }
