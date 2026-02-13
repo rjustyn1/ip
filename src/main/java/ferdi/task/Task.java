@@ -30,9 +30,17 @@ public abstract class Task {
     /**
      * Returns the description of this task.
      */
-
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * Returns whether this task is done.
+     *
+     * @return true if task is done, false otherwise
+     */
+    public boolean isDone() {
+        return isDone;
     }
 
     /**

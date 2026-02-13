@@ -23,6 +23,7 @@ public class Ferdi {
     private static final String CMD_MARK = "mark";
     private static final String CMD_UNMARK = "unmark";
     private static final String CMD_FIND = "find";
+    private static final String CMD_UPDATE = "update";
     private static final String DEFAULT_DATA_PATH = "./src/main/java/data/ferdi.txt";
 
     private final Storage storage;
@@ -116,6 +117,15 @@ public class Ferdi {
                     ui.showError("OOPS!!! Please provide a keyword to find.");
                 } else {
                     ui.showMatchingTasks(tasks.findTasks(commandArgs.trim()));
+                }
+            } else if (parsedCommand.equals(CMD_UPDATE)) {
+                try {
+                    updateTask(commandArgs);
+                } catch (IllegalArgumentException e) {
+                    ui.showError(e.getMessage());
+                } catch (Exception e) {
+                    ui.showError("There are only " + tasks.size() + " tasks in the list.");
+                    ui.showError("You cannot update task number " + commandArgs.split(" ")[0] + ".");
                 }
             } else {
                 ui.showUnknownCommand(parsedCommand);
@@ -225,12 +235,60 @@ public class Ferdi {
                     }
                 }
             }
+        } else if (parsedCommand.equals(CMD_UPDATE)) {
+            try {
+                ferdi.task.Task updatedTask = updateTask(commandArgs);
+                response.append("Got it. I've updated this task:\n  ")
+                        .append(updatedTask.toString());
+            } catch (IllegalArgumentException e) {
+                response.append(e.getMessage());
+            } catch (Exception e) {
+                response.append("There are only ").append(tasks.size()).append(" tasks in the list.\n")
+                        .append("You cannot update task number ").append(commandArgs.split(" ")[0]).append(".");
+            }
         } else {
             response.append("Unknown command: ").append(parsedCommand)
-                    .append("\nPlease try again, with \"todo\", \"deadline\", \"event\", \"mark\", \"unmark\", \"list\", \"find\", or \"bye\".");
+                    .append("\nPlease try again, with \"todo\", \"deadline\", \"event\", \"mark\", \"unmark\", \"list\", \"find\", \"update\", or \"bye\".");
         }
 
         return response.toString();
+    }
+
+    /**
+     * Updates a task based on the command arguments.
+     * Format: update TASK_NUM /field NEW_VALUE
+     * Supported fields: /by (for deadline), /from (for event), /to (for event)
+     *
+     * @param commandArgs command arguments
+     * @return the updated task
+     * @throws IllegalArgumentException if command format is invalid
+     * @throws IndexOutOfBoundsException if task number is out of range
+     */
+    private ferdi.task.Task updateTask(String commandArgs) throws IllegalArgumentException {
+        if (commandArgs == null || commandArgs.trim().isEmpty()) {
+            throw new IllegalArgumentException("OOPS!!! Please provide the task number and field to update.");
+        }
+
+        String[] parts = commandArgs.trim().split(" ", 2);
+        if (parts.length < 2) {
+            throw new IllegalArgumentException("OOPS!!! Please specify what to update (e.g., update 1 /by 2024-12-31).");
+        }
+
+        int taskNum = Integer.parseInt(parts[0]);
+        ferdi.task.Task task = tasks.getTask(taskNum - 1);
+        String updateArgs = parts[1];
+
+        if (task instanceof Deadline) {
+            ((Deadline) task).updateFromCommand(updateArgs);
+        } else if (task instanceof Event) {
+            ((Event) task).updateFromCommand(updateArgs);
+        } else {
+            throw new IllegalArgumentException("OOPS!!! ToDo tasks cannot be updated. Only Deadline and Event tasks can be modified.");
+        }
+
+        storage.save(tasks);
+        ui.showTaskUpdated(task);
+        return task;
     }
 
     /**

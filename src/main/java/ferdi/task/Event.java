@@ -41,6 +41,83 @@ public class Event extends Task {
         return new Event(parts[0].trim(), parts[1].trim(), parts[2].trim());
     }
 
+    /**
+     * Updates an Event task from a command string.
+     *
+     * @param updateArgs user-provided update arguments
+     * @throws IllegalArgumentException if format is invalid
+     */
+    public void updateFromCommand(String updateArgs) throws IllegalArgumentException {
+        boolean hasFrom = updateArgs.contains(" /from ");
+        boolean hasTo = updateArgs.contains(" /to ");
+
+        if (!hasFrom && !hasTo) {
+            throw new IllegalArgumentException("OOPS!!! For events, use /from to update start time or /to to update end time.");
+        }
+
+        if (hasFrom && hasTo) {
+            String[] parts = updateArgs.split(" /from | /to ");
+            if (parts.length < 3) {
+                throw new IllegalArgumentException("OOPS!!! Please provide valid values for /from and /to.");
+            }
+            String newFrom = parts[1].trim();
+            String newTo = parts[2].trim();
+            if (newFrom.isEmpty() || newTo.isEmpty()) {
+                throw new IllegalArgumentException("OOPS!!! Start time and end time cannot be empty.");
+            }
+            this.from = newFrom;
+            this.to = newTo;
+        } else if (hasFrom) {
+            String[] parts = updateArgs.split(" /from ", 2);
+            if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                throw new IllegalArgumentException("OOPS!!! Please provide a new start time after /from.");
+            }
+            this.from = parts[1].trim();
+        } else {
+            String[] parts = updateArgs.split(" /to ", 2);
+            if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                throw new IllegalArgumentException("OOPS!!! Please provide a new end time after /to.");
+            }
+            this.to = parts[1].trim();
+        }
+    }
+
+    /**
+     * Updates the start time of this event.
+     *
+     * @param newFrom new start time
+     */
+    public void setFrom(String newFrom) {
+        this.from = newFrom;
+    }
+
+    /**
+     * Updates the end time of this event.
+     *
+     * @param newTo new end time
+     */
+    public void setTo(String newTo) {
+        this.to = newTo;
+    }
+
+    /**
+     * Returns the start time of this event.
+     *
+     * @return start time
+     */
+    public String getFrom() {
+        return this.from;
+    }
+
+    /**
+     * Returns the end time of this event.
+     *
+     * @return end time
+     */
+    public String getTo() {
+        return this.to;
+    }
+
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: " + from + ", to: " + to + ")";
