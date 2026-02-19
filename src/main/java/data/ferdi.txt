@@ -6,3 +6,4 @@ T | 0 | return book
 T | 0 | buy book
 D | 0 | go to library | 2026-02-05
 D | 0 | study CS2103 | 2026-02-06
+T | 0 | buy book
